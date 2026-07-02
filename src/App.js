@@ -242,7 +242,10 @@ const App = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="badge">Available for full-time roles & freelance</span>
+            <span className="badge">
+              <span className="status-dot"></span>
+              Available for remote, full-time & freelance
+            </span>
             <h1>Hi, I'm <span className="name">Chinaza Ebenezer</span></h1>
             <h2>Full Stack Developer</h2>
             <p className="hero-desc">
