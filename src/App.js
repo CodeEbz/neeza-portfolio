@@ -114,7 +114,7 @@ const App = () => {
       title: "QuickBite",
       description: "A fast, modern full-stack food delivery and restaurant discovery platform. Features dynamic restaurant menus, real-time cart state management, customizable meals, instant order placement, and owner management dashboard.",
       longDescription: "QuickBite is an end-to-end food ordering and restaurant discovery platform built to streamline culinary commerce. Users can search restaurants by cuisine, filter dishes by diet/price, build custom orders with live item add-ons, calculate dynamic totals, and track order fulfillment in real time. Restaurant owners are equipped with an administrative dashboard to manage inventory, update menu pricing, and process kitchen orders instantaneously.",
-      link: "https://quickbite-food.vercel.app",
+      link: "https://quick-bite-rust-rho.vercel.app/",
       github: "https://github.com/CodeEbz/QuickBite",
       tech: ["React", "Node.js", "Express.js", "MongoDB", "REST API", "CSS Modules"],
       type: "major",
@@ -463,31 +463,13 @@ const App = () => {
               <section className="hero">
                 <div className="container hero-wrapper">
                   
-                  {/* Hero Intro Header with Top-Left Headshot Card */}
+                  {/* Hero Intro Header */}
                   <motion.div 
                     className="hero-header-card"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                   >
-                    <div 
-                      className="hero-profile-chip" 
-                      onClick={() => setShowImageModal(true)}
-                      title="Click to view full image"
-                    >
-                      <div className="hero-chip-avatar-wrapper">
-                        <img src="/images/profile.jpg" alt="Chinaza Ebenezer" className="hero-chip-img" />
-                        <div className="hero-chip-overlay">
-                          <FaExpand />
-                        </div>
-                      </div>
-                      <div className="hero-chip-info">
-                        <span className="hero-chip-name">Chinaza Ebenezer</span>
-                        <span className="hero-chip-role">Full Stack Developer</span>
-                      </div>
-                      <span className="status-dot-inline" title="Available for work"></span>
-                    </div>
-
                     <span className="badge">
                       <span className="status-dot"></span>
                       Available for Remote, Full-time & Contract
