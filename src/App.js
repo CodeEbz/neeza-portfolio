@@ -1182,13 +1182,16 @@ const App = () => {
                 </div>
               </div>
 
-              <div className="resume-modal-actions">
-                <button 
+              <div className="resume-modal-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <a 
+                  href="/resume.pdf" 
+                  download="Chinaza_Ebenezer_Resume.pdf"
+                  target="_blank" 
+                  rel="noopener noreferrer"
                   className="btn-primary" 
-                  onClick={() => triggerToast('Resume download feature ready!')}
                 >
                   <FaFileDownload /> Download PDF Resume
-                </button>
+                </a>
               </div>
             </motion.div>
           </motion.div>
