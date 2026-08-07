@@ -19,12 +19,12 @@ import {
   FaArrowUp,
   FaCheck,
   FaCopy,
-  FaUtensils,
-  FaCode,
   FaGraduationCap,
   FaBriefcase,
   FaEye,
-  FaBars
+  FaBars,
+  FaExpand,
+  FaArrowRight
 } from 'react-icons/fa';
 import './App.css';
 
@@ -35,6 +35,7 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
   const [showResumeModal, setShowResumeModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false); // Lightbox for profile picture
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
@@ -49,12 +50,12 @@ const App = () => {
 
   // Lock scroll when any modal is open
   useEffect(() => {
-    if (selectedProject || showResumeModal) {
+    if (selectedProject || showResumeModal || showImageModal) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [selectedProject, showResumeModal]);
+  }, [selectedProject, showResumeModal, showImageModal]);
 
   // Handle scroll events
   useEffect(() => {
@@ -75,6 +76,7 @@ const App = () => {
       if (e.key === 'Escape') {
         setSelectedProject(null);
         setShowResumeModal(false);
+        setShowImageModal(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -343,7 +345,7 @@ const App = () => {
         )}
       </AnimatePresence>
 
-      {/* Header Navigation */}
+      {/* Header Navigation with Top-Left Profile Picture Avatar */}
       <header className="header">
         <div className="container nav">
           <motion.div 
@@ -353,7 +355,15 @@ const App = () => {
             transition={{ duration: 0.5 }}
             onClick={() => { setActiveTab('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           >
-            <span className="logo-badge">NE</span>
+            {/* Top Left Profile Photo Avatar Badge */}
+            <div 
+              className="top-left-avatar-chip" 
+              onClick={(e) => { e.stopPropagation(); setShowImageModal(true); }}
+              title="Click to view Chinaza's headshot"
+            >
+              <img src="/images/profile.jpg" alt="Chinaza Ebenezer" className="top-avatar-img" />
+              <span className="top-avatar-online-dot"></span>
+            </div>
             <span className="logo-text">Chinaza Ebenezer</span>
           </motion.div>
 
@@ -444,7 +454,7 @@ const App = () => {
         </AnimatePresence>
       </header>
 
-      {/* Main Content Area with Page Tab Switching */}
+      {/* Main Content Area */}
       <main className="main-content">
         <AnimatePresence mode="wait">
           {/* HOME PAGE */}
@@ -452,28 +462,58 @@ const App = () => {
             <motion.div key="home" variants={pageVariants} initial="initial" animate="animate" exit="exit">
               <section className="hero">
                 <div className="container hero-wrapper">
+                  
+                  {/* Hero Intro Header with Top-Left Headshot Card */}
                   <motion.div 
-                    className="hero-text-side"
-                    initial={{ opacity: 0, x: -40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.7 }}
+                    className="hero-header-card"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
                   >
+                    <div 
+                      className="hero-profile-chip" 
+                      onClick={() => setShowImageModal(true)}
+                      title="Click to view full image"
+                    >
+                      <div className="hero-chip-avatar-wrapper">
+                        <img src="/images/profile.jpg" alt="Chinaza Ebenezer" className="hero-chip-img" />
+                        <div className="hero-chip-overlay">
+                          <FaExpand />
+                        </div>
+                      </div>
+                      <div className="hero-chip-info">
+                        <span className="hero-chip-name">Chinaza Ebenezer</span>
+                        <span className="hero-chip-role">Full Stack Developer</span>
+                      </div>
+                      <span className="status-dot-inline" title="Available for work"></span>
+                    </div>
+
                     <span className="badge">
                       <span className="status-dot"></span>
-                      Available for Full-time, Remote & Contract
+                      Available for Remote, Full-time & Contract
                     </span>
-                    <h1>Hi, I'm <span className="name">Chinaza Ebenezer</span></h1>
-                    <h2>Full Stack Software Developer</h2>
+                  </motion.div>
+
+                  <motion.div 
+                    className="hero-text-side"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, delay: 0.1 }}
+                  >
+                    <h1>Building Exceptional <span className="name">Web Applications</span> & Scalable Systems</h1>
                     <p className="hero-desc">
-                      Crafting high-performance web applications with React, Node.js, FastAPI, and Spring Boot. Dedicated to writing elegant code and engineering memorable digital experiences.
+                      Specialized in crafting pixel-perfect React frontends and robust REST API backends using Node.js, FastAPI, and Spring Boot. Solo creator of <strong>QuickBite</strong>, <strong>Nee Commerce</strong>, and high-performance software tools.
                     </p>
 
                     <div className="hero-actions">
                       <button className="btn-primary" onClick={() => setActiveTab('projects')}>
-                        Explore Projects <FaExternalLinkAlt style={{ marginLeft: '8px', fontSize: '0.8rem' }} />
+                        Explore All Projects <FaArrowRight style={{ marginLeft: '8px', fontSize: '0.9rem' }} />
                       </button>
                       <button className="btn-secondary" onClick={() => setActiveTab('contact')}>
                         Get In Touch
+                      </button>
+                      <button className="btn-outline-resume" onClick={() => setShowResumeModal(true)}>
+                        <FaFileDownload /> Resume
                       </button>
                     </div>
 
@@ -493,28 +533,6 @@ const App = () => {
                     </div>
                   </motion.div>
 
-                  {/* Profile Picture Card */}
-                  <motion.div 
-                    className="hero-avatar-side"
-                    initial={{ opacity: 0, scale: 0.85, y: 30 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                  >
-                    <div className="avatar-frame">
-                      <div className="avatar-glow-ring"></div>
-                      <img 
-                        src="/images/profile.jpg" 
-                        alt="Chinaza Ebenezer Headshot" 
-                        className="avatar-img"
-                      />
-                      <div className="avatar-floating-badge badge-top-right">
-                        <FaCode className="badge-icon" /> Full Stack
-                      </div>
-                      <div className="avatar-floating-badge badge-bottom-left">
-                        <FaUtensils className="badge-icon" /> Creator of QuickBite
-                      </div>
-                    </div>
-                  </motion.div>
                 </div>
               </section>
 
@@ -522,8 +540,8 @@ const App = () => {
               <section className="featured-strip alt-bg">
                 <div className="container">
                   <div className="section-header">
-                    <h2>Flagship Highlights</h2>
-                    <p>Recent major software projects built for performance and real-world utility.</p>
+                    <h2>Featured Major Projects</h2>
+                    <p>Explore direct live app demos, open-source repositories, and technical case studies.</p>
                   </div>
 
                   <div className="featured-grid">
@@ -536,29 +554,56 @@ const App = () => {
                       >
                         <div className="featured-img-box">
                           <img src={project.image} alt={project.title} />
-                          <div className="featured-overlay">
-                            <button className="btn-quick-view" onClick={() => setSelectedProject(project)}>
-                              <FaEye /> Case Study
-                            </button>
-                          </div>
-                        </div>
-                        <div className="featured-content">
                           <span className="project-badge major">Major Project</span>
+                        </div>
+                        
+                        <div className="featured-content">
                           <h3>{project.title}</h3>
                           <p>{project.description}</p>
+                          
                           <div className="tech-stack">
                             {project.tech.map((t, idx) => (
                               <span key={idx} className="tech-tag">{t}</span>
                             ))}
+                          </div>
+
+                          {/* Direct Links Bar on Card */}
+                          <div className="card-action-bar">
+                            {project.link && (
+                              <a 
+                                href={project.link} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="card-btn card-btn-primary"
+                              >
+                                <FaExternalLinkAlt /> Live Demo
+                              </a>
+                            )}
+                            {project.github && (
+                              <a 
+                                href={project.github} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="card-btn card-btn-secondary"
+                              >
+                                <FaGithub /> GitHub
+                              </a>
+                            )}
+                            <button 
+                              className="card-btn card-btn-outline" 
+                              onClick={() => setSelectedProject(project)}
+                            >
+                              <FaEye /> Details
+                            </button>
                           </div>
                         </div>
                       </motion.div>
                     ))}
                   </div>
 
-                  <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                    <button className="btn-secondary" onClick={() => setActiveTab('projects')}>
-                      View All {projects.length} Projects &rarr;
+                  <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
+                    <button className="btn-primary" onClick={() => setActiveTab('projects')}>
+                      View All {projects.length} Projects in Gallery &rarr;
                     </button>
                   </div>
                 </div>
@@ -573,36 +618,44 @@ const App = () => {
                 <div className="container">
                   <div className="section-header">
                     <h2>About Me</h2>
-                    <p>My background, technical journey, and development philosophy.</p>
+                    <p>My background, technical journey, and software development philosophy.</p>
                   </div>
 
                   <div className="about-hero-card">
-                    <div className="about-photo-wrapper">
+                    <div 
+                      className="about-photo-wrapper clickable-photo" 
+                      onClick={() => setShowImageModal(true)}
+                      title="Click to expand headshot"
+                    >
                       <img src="/images/profile.jpg" alt="Chinaza Ebenezer" className="about-photo" />
-                      <div className="about-photo-tag">Chinaza Ebenezer</div>
+                      <div className="about-photo-tag">
+                        <span>Chinaza Ebenezer</span>
+                        <FaExpand style={{ fontSize: '0.85rem' }} />
+                      </div>
                     </div>
+
                     <div className="about-bio">
-                      <h3>Passionate Full Stack Developer</h3>
+                      <h3>Passionate Full Stack Engineer</h3>
                       <p>
-                        I am a software engineer dedicated to building scalable web applications that deliver real value to users. With hands-on expertise spanning frontend React user interfaces to multi-tiered backend APIs built with FastAPI, Spring Boot, and Express, I build complete products from concept to deployment.
+                        I am a software developer dedicated to building scalable, user-first web applications. With hands-on expertise spanning modern React frontend architectures to multi-tiered backend APIs built with FastAPI, Spring Boot, and Node.js, I build complete web applications from concept to deployment.
                       </p>
                       <p>
-                        My portfolio includes applications like <strong>QuickBite</strong> (a full-stack food delivery platform), <strong>Nee Commerce</strong> (WhatsApp Business catalog checkout system), and <strong>SkyBook Airlines</strong> (full-stack flight booking system). I pride myself on clean architecture, strong problem-solving skills, and a user-centric design approach.
+                        My portfolio features major applications like <strong>QuickBite</strong> (a real-time food delivery and ordering system), <strong>Nee Commerce</strong> (WhatsApp Business catalog checkout system), and <strong>SkyBook Airlines</strong> (full-stack flight booking system). I pride myself on clean code structure, quick adaptability, and elegant UI design.
                       </p>
 
                       <div className="about-quick-facts">
                         <div className="fact-item">
                           <FaBriefcase className="fact-icon" />
                           <div>
-                            <strong>Focus Areas</strong>
-                            <span>Frontend & Backend Systems</span>
+                            <strong>Specializations</strong>
+                            <span>Full-Stack Engineering & Web Architecture</span>
                           </div>
                         </div>
                         <div className="fact-item">
                           <FaGraduationCap className="fact-icon" />
                           <div>
                             <strong>Core Stack</strong>
-                            <span>React, Node.js, FastAPI, Spring Boot</span>
+                            <span>React, Node.js, FastAPI, Spring Boot, SQL/NoSQL</span>
                           </div>
                         </div>
                       </div>
@@ -621,7 +674,7 @@ const App = () => {
                     </div>
                     <div className="stat-card">
                       <div className="stat-num">100%</div>
-                      <div className="stat-name">Clean Code Commitment</div>
+                      <div className="stat-name">Commitment to Quality</div>
                     </div>
                     <div className="stat-card">
                       <div className="stat-num">24/7</div>
@@ -708,25 +761,34 @@ const App = () => {
                               ))}
                             </div>
 
-                            <div className="project-links">
+                            {/* Direct Links Bar */}
+                            <div className="card-action-bar">
+                              {project.link && (
+                                <a 
+                                  href={project.link} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="card-btn card-btn-primary"
+                                >
+                                  <FaExternalLinkAlt /> Live Demo
+                                </a>
+                              )}
+                              {project.github && (
+                                <a 
+                                  href={project.github} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="card-btn card-btn-secondary"
+                                >
+                                  <FaGithub /> GitHub
+                                </a>
+                              )}
                               <button 
-                                onClick={() => setSelectedProject(project)} 
-                                className="project-link-btn"
+                                className="card-btn card-btn-outline" 
+                                onClick={() => setSelectedProject(project)}
                               >
-                                Explore Case Study &rarr;
+                                <FaEye /> Details
                               </button>
-                              <div className="project-links-right">
-                                {project.github && (
-                                  <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-icon-link" aria-label="GitHub">
-                                    <FaGithub />
-                                  </a>
-                                )}
-                                {project.link && (
-                                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-icon-link" aria-label="Live Demo">
-                                    <FaExternalLinkAlt />
-                                  </a>
-                                )}
-                              </div>
                             </div>
                           </div>
                         </motion.div>
@@ -754,7 +816,7 @@ const App = () => {
                 <div className="container">
                   <div className="section-header">
                     <h2>Skills & Technologies</h2>
-                    <p>The tech stack, frameworks, and modern tools I utilize to build software.</p>
+                    <p>The tech stack, frameworks, and modern tools I leverage to build web applications.</p>
                   </div>
 
                   <div className="skills-container">
@@ -944,7 +1006,7 @@ const App = () => {
               <button 
                 className="modal-close-btn"
                 onClick={() => setSelectedProject(null)}
-                aria-label="Close case study details"
+                aria-label="Close details"
               >
                 <FaTimes />
               </button>
@@ -1002,16 +1064,6 @@ const App = () => {
                     <div className="modal-sidebar-card">
                       <h4>Project Links</h4>
                       <div className="modal-action-links">
-                        {selectedProject.github && (
-                          <a 
-                            href={selectedProject.github} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="btn-secondary modal-btn"
-                          >
-                            <FaGithub /> View Repository
-                          </a>
-                        )}
                         {selectedProject.link && (
                           <a 
                             href={selectedProject.link} 
@@ -1022,10 +1074,54 @@ const App = () => {
                             <FaExternalLinkAlt /> Open Live App
                           </a>
                         )}
+                        {selectedProject.github && (
+                          <a 
+                            href={selectedProject.github} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="btn-secondary modal-btn"
+                          >
+                            <FaGithub /> View Repository
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Profile Picture Lightbox Modal */}
+      <AnimatePresence>
+        {showImageModal && (
+          <motion.div 
+            className="modal-overlay image-lightbox-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowImageModal(false)}
+          >
+            <motion.div 
+              className="image-lightbox-card"
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close-btn" onClick={() => setShowImageModal(false)}>
+                <FaTimes />
+              </button>
+              
+              <div className="lightbox-image-box">
+                <img src="/images/profile.jpg" alt="Chinaza Ebenezer Headshot" className="lightbox-full-img" />
+              </div>
+
+              <div className="lightbox-caption">
+                <h3>Chinaza Ebenezer</h3>
+                <p>Full Stack Software Developer</p>
               </div>
             </motion.div>
           </motion.div>
