@@ -1184,8 +1184,8 @@ const App = () => {
 
               <div className="resume-modal-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                 <a 
-                  href="/resume.pdf" 
-                  download="Chinaza_Ebenezer_Resume.pdf"
+                  href="/Chinaza_Ebenezer_Software_Dev_CV.pdf" 
+                  download="Chinaza_Ebenezer_Software_Dev_CV.pdf"
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="btn-primary" 
